@@ -1,0 +1,10 @@
+-- Write your PostgreSQL query statement below
+with ads as 
+(select *,
+count(*) over(partition by tiv_2015) as cnt_tiv_15, -- it will count the repeatitions of tiv_2015 values which must be > 1
+count(*) over(partition by lat,lon) as cnt_city -- it will count the repeatitions pair of long..,lat.. which must be  = 1 (unique)
+from insurance it
+)
+
+select round(sum(ads.tiv_2016)::numeric,2) as tiv_2016 from ads
+where cnt_tiv_15 > 1 and cnt_city = 1 
