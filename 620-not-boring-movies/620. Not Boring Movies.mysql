@@ -1,0 +1,5 @@
+# Write your MySQL query statement below
+select * from cinema as c 
+where mod(c.id,2)=1
+and c.description not like "boring"
+order by rating desc
