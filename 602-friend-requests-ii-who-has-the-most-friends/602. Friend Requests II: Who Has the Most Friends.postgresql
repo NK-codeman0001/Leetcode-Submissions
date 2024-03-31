@@ -1,0 +1,13 @@
+-- Write your PostgreSQL query statement below
+with ads as (
+select requester_id as id
+    from requestaccepted rat
+union all
+select accepter_id as id
+    from requestaccepted rat
+)
+
+select id, count(*) as num from ads
+group by id
+order by count(*) desc
+limit 1
