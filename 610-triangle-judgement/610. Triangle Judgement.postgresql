@@ -1,0 +1,9 @@
+-- Write your PostgreSQL query statement below
+select 
+*,
+case 
+    when (x<y+z) and (z<y+x) and (y<x+z) then 'Yes'
+    else 'No'
+end as triangle
+from
+triangle
