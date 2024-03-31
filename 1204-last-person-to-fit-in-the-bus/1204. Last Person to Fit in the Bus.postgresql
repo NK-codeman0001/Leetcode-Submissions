@@ -1,0 +1,9 @@
+-- Write your PostgreSQL query statement below
+-- s1 get the trailing (cummulative) sum of weight order by turn
+with ads as (select *,
+sum(weight) over(order by turn) as trail_sum
+from queue)
+
+--s2 last person will have the maximum turn no.
+select person_name from ads
+where turn = (select max(turn) from ads where trail_sum <=1000);
