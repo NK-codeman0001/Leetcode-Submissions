@@ -1,0 +1,14 @@
+-- Write your PostgreSQL query statement below
+with cte as (
+select 
+    employee_id ,
+    max(primary_flag) as flag
+from employee
+group by 1 having (max(primary_flag) = 'N' and count(*)=1) or(max(primary_flag)='Y')
+)
+select
+ e.employee_id ,
+ e.department_id 
+from employee e
+inner join cte b on
+e.employee_id = b.employee_id and b.flag = e.primary_flag
