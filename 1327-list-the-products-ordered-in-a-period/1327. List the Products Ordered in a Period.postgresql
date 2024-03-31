@@ -1,0 +1,19 @@
+-- Write your PostgreSQL query statement below
+with cte as (select 
+product_name,
+extract(month from order_date) as month,
+extract(year from order_date) as year,
+sum(unit) as unit
+from
+products p 
+inner join orders o
+on p.product_id = o.product_id
+group by 1,2,3
+)
+select 
+product_name,
+unit
+from cte
+where month = 2
+and unit >= 100
+and year = 2020
