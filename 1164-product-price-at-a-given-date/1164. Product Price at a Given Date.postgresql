@@ -1,0 +1,21 @@
+-- Write your PostgreSQL query statement below
+
+-- step1 rank rows based on there change_date based on latest date 1
+with ads as (select product_id, new_price, change_date,
+rank() over(partition by product_id order by change_date desc) as rank
+from products
+where change_date <= '2019-08-16'
+)
+
+--step2 to get the result for best cases
+select product_id,
+ads.new_price as price
+from ads
+where rank =1
+
+--step3 for edge case in which product which has change_date starting after 2019-08-16
+
+union
+
+select distinct product_id, 10 as price from products
+where product_id not in (select product_id from ads)
