@@ -1,0 +1,14 @@
+-- Write your PostgreSQL query statement below
+with ads as (select * ,
+case
+    when id%2 = 1 then id+1
+    when id%2 = 0 then id-1
+end
+as new_id
+from seat
+)
+select
+row_number() over(order by new_id) as id,
+student
+from ads
+
