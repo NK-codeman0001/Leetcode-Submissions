@@ -1,0 +1,22 @@
+-- Write your PostgreSQL query statement below
+with cte as (
+select 
+    player_id,
+    (select min(event_date) from activity where player_id = b.player_id )as first_login,
+    event_date
+    from activity b
+)
+-- select * from cte
+select
+-- -- a.event_date as aa,
+-- -- a.event_date+1 as bb
+
+round(sum(
+case
+    when a.first_login+1 = a.event_date then 1.0
+    else 0
+end
+)/count( distinct a.player_id)
+,2)as fraction
+from cte a
+-- group by a.player_id
