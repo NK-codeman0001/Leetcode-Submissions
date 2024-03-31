@@ -1,0 +1,14 @@
+-- Write your PostgreSQL query statement below
+with ads as(
+    select visited_on,
+    sum(sum(amount)) over(order by visited_on Rows Between 6 Preceding and current row) as sum_amount
+    from customer ct 
+    group by visited_on
+)
+
+select visited_on,
+sum_amount as amount,
+round(sum_amount/7.0,2) as average_amount
+from ads
+order by 1
+offset 6
