@@ -1,0 +1,21 @@
+WITH
+    total_users AS (
+        SELECT
+            COUNT(DISTINCT user_id) AS user_count
+        FROM
+            Users
+    )
+
+SELECT
+    Register.contest_id,
+    ROUND(COUNT(*) * 100::DECIMAL / (SELECT user_count FROM total_users), 2) AS percentage
+FROM
+    Users
+JOIN
+    Register
+    ON Register.user_id = Users.user_id
+GROUP BY
+    Register.contest_id
+ORDER BY
+    percentage DESC,
+    contest_id
