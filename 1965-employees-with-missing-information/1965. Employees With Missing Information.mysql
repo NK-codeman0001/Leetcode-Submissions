@@ -1,0 +1,4 @@
+# Write your MySQL query statement below
+select employee_id from Employees where Employees.employee_id NOT IN (select employee_id from Salaries)
+Union
+select employee_id from Salaries where Salaries.employee_id NOT IN (select employee_id from Employees) order by employee_id;
