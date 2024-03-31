@@ -1,0 +1,18 @@
+-- Write your PostgreSQL query statement below
+select
+to_char(t.trans_date,'YYYY') ||'-'|| to_char(t.trans_date,'MM') as month,
+t.country,
+coalesce(count(*),0) as trans_count,
+coalesce(count(
+case
+    when t.state = 'approved' then t.amount
+end
+),0) as approved_count,
+coalesce(sum(t.amount),0) as trans_total_amount,
+coalesce(sum(
+case
+    when t.state = 'approved' then t.amount
+end
+),0) as approved_total_amount
+from transactions t
+group by 1,2
