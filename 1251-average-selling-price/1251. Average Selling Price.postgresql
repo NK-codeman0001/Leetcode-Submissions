@@ -1,0 +1,17 @@
+-- Write your PostgreSQL query statement below
+select p.product_id, 
+coalesce(round(sum(
+    case
+    when u.purchase_date >=p.start_date and u.purchase_date <=p.end_date then
+    p.price * u.units * 1.00
+    end)/
+    sum(
+    case
+    when u.purchase_date >=p.start_date and u.purchase_date <=p.end_date then
+    u.units
+    end
+    )
+    ,2),0.0) as average_price
+from prices p full join unitssold u on u.product_id = p.product_id
+group by 1
+order by 1
