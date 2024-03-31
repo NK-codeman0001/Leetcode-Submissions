@@ -1,0 +1,12 @@
+-- Write your PostgreSQL query statement below
+with ads as (select *,
+dense_rank() over(partition by departmentId order by salary desc) as emp_rank
+from employee
+)
+
+select dt.name as department,
+et.name as employee, et.salary as salary
+from ads et
+inner join department dt on dt.id = et.departmentid
+where 
+et.emp_rank <=3
