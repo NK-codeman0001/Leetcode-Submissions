@@ -1,0 +1,21 @@
+-- Write your PostgreSQL query statement below
+WITH ads AS (
+    SELECT *,
+           COUNT(mrt.movie_id) OVER (PARTITION BY mrt.user_id) AS user_factor,
+           AVG(rating) OVER (PARTITION BY mrt.movie_id, date_trunc('month', mrt.created_at)) AS movie_factor
+    FROM movierating mrt 
+         INNER JOIN users ut ON ut.user_id = mrt.user_id
+         INNER JOIN movies mt ON mt.movie_id = mrt.movie_id 
+    -- WHERE date_trunc('month', mrt.created_at) = '2020-02-01'
+)
+
+(SELECT ads.name AS results FROM ads
+ORDER BY user_factor DESC, ads.name ASC LIMIT 1
+)
+UNION ALL
+
+(SELECT ads.title AS results FROM ads
+WHERE date_trunc('month', ads.created_at) = '2020-02-01'
+ORDER BY movie_factor DESC, ads.title ASC LIMIT 1
+) 
+-- select * from ads
