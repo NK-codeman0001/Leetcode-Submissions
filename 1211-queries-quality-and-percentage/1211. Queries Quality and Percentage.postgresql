@@ -1,0 +1,14 @@
+-- Write your PostgreSQL query statement below
+select
+query_name,
+round(coalesce(avg(rating*1.0/position),0.0),2) as quality,
+round(coalesce(
+sum(case
+   when rating < 3 then 1
+   end)*100.0/
+    count(*),
+    0.0),2) as poor_query_percentage
+from
+queries
+where query_name is not null
+group by 1
